@@ -2,6 +2,7 @@
   "name": "text_only",
   "module": "src/index.ts",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun run src/index.ts",
