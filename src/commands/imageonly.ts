@@ -29,11 +29,11 @@ export const imageOnlyCommand = {
         .addChannelTypes(ChannelType.GuildText)
         .setRequired(false)
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false),
 
   async execute(interaction: ChatInputCommandInteraction) {
-    const enabled = interaction.options.getBoolean('enabled', true);
+    const enabled = interaction.options.getBoolean('enabled')!;
     const channel = (interaction.options.getChannel('channel') || interaction.channel) as TextChannel | null;
     if (!channel || channel.type !== ChannelType.GuildText) {
       await interaction.reply({ content: 'テキストチャンネルで実行してください。', flags: MessageFlags.Ephemeral });
@@ -42,6 +42,12 @@ export const imageOnlyCommand = {
 
     if (!interaction.guildId) {
       await interaction.reply({ content: 'ギルド内でのみ使用可能です。', flags: MessageFlags.Ephemeral });
+      return;
+    }
+
+    // 追加の安全策: 実行時にも管理者権限を確認
+    if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+      await interaction.reply({ content: 'このコマンドはサーバー管理者のみが実行できます。', flags: MessageFlags.Ephemeral });
       return;
     }
 
