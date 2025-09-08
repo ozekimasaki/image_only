@@ -1,6 +1,7 @@
 import {
   ChatInputCommandInteraction,
   ChannelType,
+  InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder,
   TextChannel,
@@ -30,7 +31,7 @@ export const imageOnlyCommand = {
         .setRequired(false)
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .setDMPermission(false),
+    .setContexts([InteractionContextType.Guild]),
 
   async execute(interaction: ChatInputCommandInteraction) {
     const enabled = interaction.options.getBoolean('enabled')!;
